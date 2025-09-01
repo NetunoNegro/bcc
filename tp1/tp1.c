@@ -18,14 +18,14 @@ int main ()
     struct racional r1, r2, soma, sub, mult, div;
     //srand (0); /* use assim, com zero */
     srand(0);
-    scanf("%d %d", &n, &max);
+    scanf("%d %ld", &n, &max);
     for (i = 1; i <= n; i++){
         printf("%d: ", i);
         r1 = sorteia_r(0, max);
         r2 = sorteia_r(0, max);
         imprime_r(r1);
         imprime_r(r2);
-        if (!valido_r(r1) || !valido_r(r2)){
+        if ((!valido_r(r1)) || (!valido_r(r2))){
             printf("NUMERO INVALIDO");
             return(1);
         }

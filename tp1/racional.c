@@ -31,113 +31,10 @@ struct racional cria_r (long numerador, long denominador){
 /* Retorna 1 se o racional r for válido ou 0 se for inválido.
  * Um racional é inválido se seu denominador for zero */
 int valido_r (struct racional r){
-  if (r.den = 0){
+  if ((r.den == 0)){
     return(0);
   }
   return(1);
-}
-
-/* Retorna um número racional aleatório na forma simplificada.
- * Deve ser sorteado o numerador e depois o denominador.
- * o racional gerado pode ser válido ou inválido.
- * O numerador e o denominador devem ser inteiros entre min e max. */
-struct racional sorteia_r (long min, long max){
-  struct racional r;
-  r.num = aleat(min, max);
-  r.den = aleat(min, max);
-  return(r);
-}
-
-/* Imprime um racional r, respeitando estas regras:
-   - o racional deve ser impresso na forma simplificada;
-   - não imprima espaços em branco e não mude de linha;
-   - a saída deve ter o formato "num/den", a menos dos casos abaixo:
-     - se o racional for inválido, deve imprimir a mensagem "INVALIDO";
-     - se o numerador for 0, deve imprimir somente "0";
-     - se o denominador for 1, deve imprimir somente o numerador;
-     - se o numerador e denominador forem iguais, deve imprimir somente "1";
-     - se o racional for negativo, o sinal "-" deve vir antes do numerador;
-     - se numerador e denominador forem negativos, o racional é positivo. */
-void imprime_r (struct racional r){
-  if (!valido_r(r)){
-    printf("INVALIDO ");
-  }
-  else if (r.num = 0){
-    printf("0 ");
-  }
-  else if (r.den = 1){
-    printf("%ld ", r.num);
-  }
-  else if (r.num = r.den){
-    printf("1 ");
-  }
-  else{
-    printf("%ld/%ld ", r.num, r.den);
-  }
-}
-
-struct racional soma_r (struct racional r1, struct racional r2){
-  struct racional r3;
-  if (!valido_r(r1) || !valdio_r(r2)){
-    r3.num = 0;
-    r3.den = 0;
-    return(r3);
-  }
-  if (r1.den != r2.den){
-    r1.num = r1.num * r2.den;
-    r1.den = r1.den * r2.den;
-    r2.num = r2.num * r1.den;
-    r2.den = r2.den * r1.den;
-  }
-  r3.den = r1.den;
-  r3.num = r1.num + r2.num;
-//  r3 = simplifica_r(r3);
-  return(r3);
-}
-
-struct racional subtrai_r (struct racional r1, struct racional r2){
-  struct racional r3;
-  if (!valido_r(r1) || !valdio_r(r2)){
-    r3.num = 0;
-    r3.den = 0;
-    return(r3);
-  }
-  if (r1.den != r2.den){
-    r1.num = r1.num * r2.den;
-    r1.den = r1.den * r2.den;
-    r2.num = r2.num * r1.den;
-    r2.den = r2.den * r1.den;
-  }
-  r3.den = r1.den;
-  r3.num = r1.num - r2.num;
-//  r3 = simplifica_r(r3);
-  return(r3);
-}
-
-struct racional multiplica_r (struct racional r1, struct racional r2){
-  struct racional r3;
-  if (!valido_r(r1) || !valdio_r(r2)){
-    r3.num = 0;
-    r3.den = 0;
-    return(r3);
-  }
-  r3.num = r1.num * r2.num;
-  r3.den = r1.den * r2.den;
- // r3 = simplifica_r(r3);
-  return(r3);
-}
-
-struct racional divide_r (struct racional r1, struct racional r2){
-  struct racional r3;
-  if (!valido_r(r1) || !valdio_r(r2) || (r2.num = 0)){
-    r3.num = 0;
-    r3.den = 0;
-    return(r3);
-  }
-  r3.num = r1.num * r2.den;
-  r3.den = r1.den * r2.num;
-//  r3 = simplifica_r(r3);
-  return(r3);
 }
 
 /* retorna um número aleatório entre min e max, inclusive. */
@@ -155,6 +52,8 @@ long aleat (long min, long max)
 long mdc (long a, long b)
 {
     long min, max, resto;
+    a = fabs(a);
+    b = fabs(b);
     if (a < b){
         min = a;
         max = b;
@@ -171,13 +70,6 @@ long mdc (long a, long b)
     return(max);
 }
 
-/* Mínimo Múltiplo Comum entre a e b */
-/* mmc = (a * b) / mdc (a, b)        */
-long mmc (long a, long b)
-{
-  return((a * b) / mdc(a, b));
-}
-
 /* Recebe um número racional e o simplifica.
  * Por exemplo, ao receber 10/8 deve retornar 5/4.
  * Se ambos numerador e denominador forem negativos, deve retornar um positivo.
@@ -185,18 +77,121 @@ long mmc (long a, long b)
  * Se r for inválido, devolve-o sem simplificar. */
 struct racional simplifica_r (struct racional r)
 {
-  if (r.den = 0){
+  long div;
+  if ((r.den == 0)){
     return(r);
   }
-  r.num = r.num / mdc(r.num, r.den);
-  r.den = r.den / mdc(r.num, r.den);
-  printf("&lf denominador", r.den);
+  if ((r.num == 0)){
+    r.den = 1;
+    return(r);
+  }
+  div = mdc(r.num, r.den);
+  r.num = r.num / div;
+  r.den = r.den / div;
   if (r.den < 0){
     r.num = -r.num;
     r.den = -r.den;
   }
-
   return(r);
+}
+
+/* Retorna um número racional aleatório na forma simplificada.
+ * Deve ser sorteado o numerador e depois o denominador.
+ * o racional gerado pode ser válido ou inválido.
+ * O numerador e o denominador devem ser inteiros entre min e max. */
+struct racional sorteia_r (long min, long max){
+  struct racional r;
+  r.num = aleat(min, max);
+  r.den = aleat(min, max);
+  r = simplifica_r(r);
+  return(r);
+}
+
+/* Imprime um racional r, respeitando estas regras:
+   - o racional deve ser impresso na forma simplificada;
+   - não imprima espaços em branco e não mude de linha;
+   - a saída deve ter o formato "num/den", a menos dos casos abaixo:
+     - se o racional for inválido, deve imprimir a mensagem "INVALIDO";
+     - se o numerador for 0, deve imprimir somente "0";
+     - se o denominador for 1, deve imprimir somente o numerador;
+     - se o numerador e denominador forem iguais, deve imprimir somente "1";
+     - se o racional for negativo, o sinal "-" deve vir antes do numerador;
+     - se numerador e denominador forem negativos, o racional é positivo. */
+void imprime_r (struct racional r){
+  if (!valido_r(r)){
+    printf("INVALIDO ");
+  }
+  else if ((r.num == 0)){
+    printf("0 ");
+  }
+  else if ((r.den == 1)){
+    printf("%ld ", r.num);
+  }
+  else if ((r.num == r.den)){
+    printf("1 ");
+  }
+  else{
+    printf("%ld/%ld ", r.num, r.den);
+  }
+}
+
+struct racional soma_r (struct racional r1, struct racional r2){
+  struct racional r3;
+  if (!valido_r(r1) || !valido_r(r2)){
+    r3.num = 0;
+    r3.den = 0;
+    return(r3);
+  }
+  r3.den = r1.den * r2.den;
+  r3.num = r1.num * r2.den + r2.num * r1.den;
+  r3 = simplifica_r(r3);
+  return(r3);
+}
+
+struct racional subtrai_r (struct racional r1, struct racional r2){
+  struct racional r3;
+  if (!valido_r(r1) || !valido_r(r2)){
+    r3.num = 0;
+    r3.den = 0;
+    return(r3);
+  }
+  r3.den = r1.den * r2.den;
+  r3.num = r1.num * r2.den - r2.num * r1.den;
+  r3 = simplifica_r(r3);
+  return(r3);
+}
+
+struct racional multiplica_r (struct racional r1, struct racional r2){
+  struct racional r3;
+  if (!valido_r(r1) || !valido_r(r2)){
+    r3.num = 0;
+    r3.den = 0;
+    return(r3);
+  }
+  r3.num = r1.num * r2.num;
+  r3.den = r1.den * r2.den;
+  r3 = simplifica_r(r3);
+  return(r3);
+}
+
+struct racional divide_r (struct racional r1, struct racional r2){
+  struct racional r3;
+  if (!valido_r(r1) || !valido_r(r2) || (r2.num == 0)){
+    r3.num = 0;
+    r3.den = 0;
+    return(r3);
+  }
+  r3.num = r1.num * r2.den;
+  r3.den = r1.den * r2.num;
+  r3 = simplifica_r(r3);
+  return(r3);
+}
+
+/* Mínimo Múltiplo Comum entre a e b */
+/* mmc = (a * b) / mdc (a, b)        */
+long mmc (long a, long b)
+{
+  return((a * b) / mdc(a, b));
 }
 
 /* implemente as demais funções aqui */
