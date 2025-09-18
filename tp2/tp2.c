@@ -10,37 +10,21 @@
 const int max = 100;
 /* coloque aqui as funções auxiliares que precisar neste arquivo */
 
-/*remove_nan(struct racional v[], int n){
-  int i, j, nan;
-  struct racional aux;
-  nan = 0;
-  for (i = 0; i < n - nan; i++){
-    if (v[i].den == 0){
-      nan++;
-      for (j = n - nan; j > 0; j--){
-        if (v[j].den != 0){
-          aux = v[i];
-          v[i] = v[j];
-          v[j] = aux;
-          break;
-        }
-      }
-    }
-  }
-}*/
 
-remove_nan(struct racional v[], int n){
-  int i, j, nan;
+void ordena_vetor(struct racional v[], int n){
+  
+}
+
+void remove_nan(struct racional v[], int *n){
+  int i, j;
   struct racional aux;
-  nan = 0;
-  for (i = 0; i < n; i++){
+  for (i = 0; i < *n ; i++){
     if (v[i].den == 0){
-      nan++;
-    }
-  }
-  for (i = 0; i < n - nan; i++){
-    if (v[i].den == 0){
-      for (j = n - nan; j < n; j++){
+      *n = *n - 1;
+      for (j = *n ; j > i; j--){
+        if (v[j].den == 0){
+          *n = *n - 1;
+        }
         if (v[j].den != 0){
           aux = v[i];
           v[i] = v[j];
@@ -66,10 +50,11 @@ int main ()
   for (i = 0; i < n; i ++){
     imprime_r(v[i]);
   }
-  remove_nan(v, n);
+  remove_nan(v, &n);
   printf("\nVETOR = ");
   for (i = 0; i < n; i ++){
     imprime_r(v[i]);
   }
+  ordena_vetor(v, n);
   return (0);
 }
