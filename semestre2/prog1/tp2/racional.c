@@ -97,8 +97,10 @@ struct racional simplifica_r (struct racional r)
  * O numerador e o denominador devem ser inteiros entre min e max.*/
 struct racional sorteia_r (long min, long max){
   struct racional r;
-  r.num = aleat(min, max);
-  r.den = aleat(min, max);
+  long num, den;
+  num = aleat(min, max);
+  den = aleat(min, max);
+  r = cria_r(num, den);
   r = simplifica_r(r);
   return(r);
 }
@@ -135,13 +137,15 @@ void imprime_r (struct racional r){
 /* Compara dois racionais r1 e r2. Retorno: -2 se r1 ou r2 for inválido,
  * -1 se r1 < r2, 0 se r1 = r2 ou 1 se r1 > r2 */
 int compara_r (struct racional r1, struct racional r2){
+  r1 = simplifica_r(r1);
+  r2 = simplifica_r(r2);
   if (!valido_r(r1) || !valido_r(r2)){
     return(-2);
   }
-  else if ((r1.num/r1.den) < (r2.num/r2.den)){
+  else if (r1.num * r2.den < r2.num * r1.den){
     return(-1);
   }
-  else if ((r1.num/r1.den) == (r2.num/r2.den)){
+  else if ((r1.den == r2.den) && (r1.num == r2.num)){
     return(0);
   }
   else
