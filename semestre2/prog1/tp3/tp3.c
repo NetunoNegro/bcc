@@ -12,7 +12,7 @@
 
 /* coloque aqui as funções auxiliares que precisar neste arquivo */
 
-//soma o vetor na struct soma
+//soma o vetor na struct *soma
 void soma_do_vetor(struct racional **v, int n, struct racional *soma){
   int i;
   for (i = 0; i <  n; i++){
@@ -37,18 +37,18 @@ void ordena_vetor(struct racional **v, int n){
   }
 }
 
+//remove os numeros invalidos, troca os invalidos mais pertos de v[0] pelos validos mais longe
+//tambem remove os invalidos quando está buscando por um valido
 void remove_nan(struct racional **v, int *n){
   int i, j;
   for (i = 0; i < *n; i++){
     if (!valido_r(v[i])){
       *n = *n - 1;
-      free(v[i]);
-      v[i] = NULL;
+      destroi_r(&v[i]);
       for(j = *n; j > i; j--){
         if (!valido_r(v[j])){
           *n = *n - 1;
-          free(v[j]);
-          v[j] = NULL;
+          destroi_r(&v[j]);
         }
         if (valido_r(v[j])){
           v[i] = v[j];
@@ -60,6 +60,8 @@ void remove_nan(struct racional **v, int *n){
   }
 }
 
+
+//imprime o vetor no padrão
 void imprime_vetor(struct racional **v, int n){
   int i;
   printf("VETOR =");
@@ -72,42 +74,60 @@ void imprime_vetor(struct racional **v, int n){
   printf("\n");
 }
 
+//imprime a soma no padrão
 void imprime_soma(struct racional *soma){
   printf("SOMA = ");
   imprime_r(soma);
   printf("\n");
 }
 
+//apaga os ponteiros do vetor
+void apaga_valvetor(struct racional **v, int n){
+  int i;
+  for (i = 0; i < n; i++)
+    destroi_r(&v[i]);
+}
+
+//le o vetor
+void ler_vetor(struct racional **v, int n){
+  int i;
+  long num, den;
+  for (i = 0; i < n; i++){
+    scanf("%ld %ld", &num, &den);
+    v[i] = cria_r(num, den);
+  }
+}
+
 /* programa principal */
 int main ()
 {
-  int n, i;
-  long num, den;
+  int n;
   struct racional *soma;
   scanf("%d", &n);
   if (n < 0 || n > 100)
     return 0;
   struct racional **vetor;
   vetor = malloc(n * sizeof(struct racional*));
-  for (i = 0; i < n; i++){
-    scanf("%ld %ld", &num, &den);
-    vetor[i] = cria_r(num, den);
-  }
+
+  ler_vetor(vetor, n);
   imprime_vetor(vetor, n);
+
   remove_nan(vetor, &n);
   imprime_vetor(vetor, n);
+
   ordena_vetor(vetor, n);
   imprime_vetor(vetor, n);
+
   soma = cria_r(0, 1);
   soma_do_vetor(vetor, n, soma);
   imprime_soma(soma);
-  for (i = 0; i < n; i++){
-    free(vetor[i]);
-    vetor[i] = NULL;
-  }
+
+  apaga_valvetor(vetor, n);
   imprime_vetor(vetor, n);
-  destroi_r(vetor);
-  free(soma);
-  soma = NULL;
+
+  free(vetor);
+  vetor = NULL;
+  destroi_r(&soma);
+
   return 0;
 }

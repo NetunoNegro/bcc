@@ -105,8 +105,8 @@ struct racional *cria_r (long numerador, long denominador){
 
 /* Libera a memória alocada para o racional apontado por r */
 void destroi_r (struct racional **r){
-  free(r);
-  r = NULL;
+  free(*r);
+  *r = NULL;
 }
 
 /* Retorna 1 se o racional r for válido ou 0 se for inválido. Um racional
