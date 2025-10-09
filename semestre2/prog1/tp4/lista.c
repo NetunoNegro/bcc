@@ -1,6 +1,7 @@
 #include "lista.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 /* coloque demais includes aqui */
 
 /* ------------------- Nao altere estas structs ------------------------- */
@@ -13,26 +14,24 @@ struct lista {
     struct nodo *ini;
     struct nodo *ptr; /* ponteiro para algum nodo da lista (iterador) */
     int tamanho;
-
 };
 /* ---------------------------------------------------------------------- */
 
 struct lista *lista_cria (){
-    struct lista *l = malloc(2*sizeof(struct nodo) + sizeof(int));
+    struct lista *l = malloc(sizeof(struct lista));
     if (l == NULL)
         return NULL;
-    l->tamanho = 0;
-    l->ini = NULL;
-    l->ptr = NULL;
+    memset (l , 0, sizeof(struct lista));
     return l;
 }
 
 void lista_destroi (struct lista **lista){
+
 }
 
 int lista_insere_inicio (struct lista *lista, int chave){
-    struct nodo *n = malloc(sizeof(int) + sizeof(struct nodo));
-    if (n == NULL)
+    struct nodo *n = malloc(sizeof(struct nodo));
+    if (n == NULL || lista == NULL)
         return 0;
     n->chave = chave;
     n->prox = lista->ini;
@@ -42,15 +41,15 @@ int lista_insere_inicio (struct lista *lista, int chave){
 }
 
 int lista_insere_fim (struct lista *lista, int chave){
-    struct nodo *n = malloc(sizeof(int) + sizeof(struct nodo));
-    if (n == NULL)
+    struct nodo *n = malloc(sizeof(struct nodo));
+    if (n == NULL  || lista == NULL)
         return 0;
     n->chave = chave;
-    int i;
     struct nodo *aux = lista->ini;
-    for (i = 1; i < lista->tamanho; i++){
+    if (aux == NULL)
+        return 0;
+    while (aux->prox != NULL)
         aux = aux->prox;
-    }
     aux->prox = n;
     n->prox = NULL;
     lista->tamanho++;
@@ -58,18 +57,78 @@ int lista_insere_fim (struct lista *lista, int chave){
 }
 
 int lista_insere_ordenado (struct lista *lista, int chave){
+    struct nodo *n = malloc(sizeof(struct nodo));
+    if (n == NULL || lista == NULL)
+        return 0;
+    n->chave = chave;
+    if (lista->ini->chave > chave){
+        n->prox = lista->ini;
+        lista->ini = n;
+        lista->tamanho++;
+        return 1;
+    }
+    struct nodo *aux = lista->ini;
+    while (aux->prox->chave < chave && aux->prox != NULL)
+        aux = aux->prox;
+    if (aux->prox == NULL){
+        aux->prox = n;
+        n->prox = NULL;
+        lista->tamanho++;
+        return 1;
+    }
+    n->prox = aux->prox;
+    aux->prox = n;
+    lista->tamanho++;
+    return 1;
 }
 
 int lista_remove_inicio (struct lista *lista, int *chave){
+    if (lista->tamanho == 0)
+        return 0;
+    *chave = lista->ini->chave;
+    struct nodo *aux = lista->ini->prox;
+    free(lista->ini);
+    lista->ini =aux;
+    lista->tamanho--;
+    return 1;
 }
 
 int lista_remove_fim (struct lista *lista, int *chave){
+    if (lista->tamanho == 0)
+        return 0;
+    struct nodo *aux = lista->ini;
+    while (aux->prox != NULL)
+        aux = aux->prox;
+    *chave = aux->chave;
+    free(aux);
+    lista->tamanho--;
+    return 1;
 }
 
 int lista_remove_ordenado (struct lista *lista, int chave){
+    if(lista->tamanho == 0)
+        return 0;
+    struct nodo *aux = lista->ini;
+    if (lista->ini->chave == chave){
+        aux = lista->ini->prox;
+        free(lista->ini);
+        lista->ini = aux;
+        lista->tamanho--;
+        return 1;
+    }
+    while (aux->prox->chave != chave)
+        aux = aux->prox;
+    struct nodo *aux2 = aux->prox;
+    aux->prox = aux->prox->prox;
+    free(aux2);
+    lista->tamanho--;
+    return 1;
 }
 
 int lista_vazia (struct lista *lista){
+    if (lista->tamanho == 0)
+        return 1;
+    return 0;
 }
 
 int lista_tamanho (struct lista *lista){
@@ -77,6 +136,7 @@ int lista_tamanho (struct lista *lista){
 }
 
 int lista_pertence (struct lista *lista, int chave){
+    struct nodo *aux = lista->ini;
 }
 
 void lista_inicia_iterador (struct lista *lista){
