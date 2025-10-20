@@ -160,7 +160,7 @@ int main (void)
 
     printf ("Teste 5: inserir 5 elementos no fim:\n");
     printf ("Esperado: tem que imprimir a lista 5 vezes, a cada vez com o maior elemento no fim\n");
-    teste_insere_fim (l, MAX); 
+    teste_insere_fim (l, MAX);
     printf ("\n\n");
 
     printf ("Teste 6: esvaziar a lista retirando do fim:\n");
