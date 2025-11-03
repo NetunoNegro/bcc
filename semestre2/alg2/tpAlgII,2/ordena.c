@@ -3,14 +3,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define max 5
-
-struct paciente {
-    char nome[80];
-    int prioridade;
-};
-
-
 //vai ordenar vetor de 1024 completo então acho que da pra colocar 1024 no lugar do 5 no loop.
 //ordenar vetor de integer.
 void SelectSort(int v[], int tam){
@@ -19,23 +11,6 @@ void SelectSort(int v[], int tam){
         menor = i;
         for (j = i + 1; j < tam; j++){
             if (v[menor] > v[j])
-                menor = j;
-        }
-        aux = v[menor];
-        v[menor] = v[i];
-        v[i] = aux;
-    }
-}
-
-//vai ordenar vetor de 1024 completo então acho que da pra colocar 1024 no lugar do 5 no loop.
-//ordenar vetor de pacientes (struct)
-void SelectSortPacientes(struct paciente v[]){
-    int i, j, menor;
-    struct paciente aux;
-    for (i = 0; i < 5; i++){
-        menor = i;
-        for (j = i + 1; j < 5; j++){
-            if (v[menor].prioridade > v[j].prioridade)
                 menor = j;
         }
         aux = v[menor];
@@ -88,7 +63,6 @@ void HeapSort(int v[], int tam){
         SacodeHeap(v, i - 1);
     }
 }
-
 
 //acha mediana em vetor de integer.
 int Acha_mediana(int v[], int esq, int meio, int dir){
@@ -145,30 +119,6 @@ void Gera_Vetores(int v_select[], int v_quick[], int v_heap[], int tam){
         v_heap[i + 1] = v_select[i];
     }
 }
-
-
-/*int main(){
-    struct paciente v[max];
-    int i;
-    for (i = 0; i < max; i++){
-        printf("Nome : \n");
-        fgets(v[i].nome, sizeof(v[i].nome), stdin);
-        v[i].nome[strcspn(v[i].nome, "\n")] = '\0';
-        printf("Prioridade : \n");
-        scanf("%d", &v[i].prioridade);
-        getchar();
-    }
-    printf("\n\n");
-    printf("Pacientes : \n");
-    for (i = 0; i < max; i ++)
-        printf("Nome : %s  - Prioridade : %d\n", v[i].nome, v[i].prioridade);
-    SelectSort(v);
-    printf("\n\nPacientes Ordenados : \n");
-    printf("Pacientes : \n");
-    for (i = 0; i < max; i ++)
-        printf("Nome : %s  - Prioridade : %d\n", v[i].nome, v[i].prioridade);
-
-}*/
 
 int main(){
     int n, i;

@@ -45,7 +45,8 @@ int ChecaHeap(struct heap *h);
 void ImprimeHeap(struct heap *h);
 
 /* outras funções do Heap */
-void SacodeHeap(struct heap *h);
+void SacodeHeap(struct heap *h, int tam);
+
 void HeapSort(struct heap *h);
 
 #endif

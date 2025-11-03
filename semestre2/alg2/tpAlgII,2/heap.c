@@ -73,7 +73,8 @@ struct paciente RemoveHeap(struct heap *h) {
     if(HeapVazio(h)) {
         /* como n pode retornar NULL, valores impossiveis*/
         p.prioridade = -1;  
-        p.nome[0] = '\0'; 
+        p.nome[0] = '\0';
+        return p;
     }
 
     p = h->pacientes[1];
@@ -84,7 +85,7 @@ struct paciente RemoveHeap(struct heap *h) {
 
     h->pacientes[1] = h->pacientes[h->tam];
     (h->tam)--;
-    SacodeHeap(h);
+    SacodeHeap(h, h->tam);
     return p;
 }
 
@@ -107,13 +108,13 @@ void ImprimeHeap(struct heap *h) {
         printf("[%d] %s (Prioridade: %d)\n", i, h->pacientes[i].nome, h->pacientes[i].prioridade);
 }
 
-void SacodeHeap(struct heap *h) {
+void SacodeHeap(struct heap *h, int tam) {
     int i;
     struct paciente aux;
 
     i = 2;
-    while(i<=h->tam) {
-        if(i<h->tam && h->pacientes[i].prioridade < h->pacientes[i+ 1].prioridade)
+    while(i <= tam) {
+        if(i < tam && h->pacientes[i].prioridade < h->pacientes[i+ 1].prioridade)
             i++;
         if(h->pacientes[i/2].prioridade >= h->pacientes[i].prioridade)
             break;
@@ -134,6 +135,6 @@ void HeapSort(struct heap *h){
         aux = h->pacientes[1];
         h->pacientes[1] = h->pacientes[i];
         h->pacientes[i] = aux;
-        SacodeHeap(h);
+        SacodeHeap(h, i - 1);
     }
 }
