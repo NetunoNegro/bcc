@@ -2,7 +2,10 @@
 // Autor: Pedro Henrique Dalazoana dos Passos, GRR 20251993
 
 // seus #includes vão aqui
-
+#include <stdio.h>
+#include <stdlib.h>
+#include "fprio.h"
+#include "fila.h"
 // seus #defines vão aqui
 
 // minimize o uso de variáveis globais

@@ -6,7 +6,7 @@
 // descreve um nodo da fila 
 struct fila_nodo_t
 {
-	void *item ;			// item associado ao nodo
+	int item ;			// item associado ao nodo
 	struct fila_nodo_t *prox;	// próximo nodo
 };
 
@@ -34,19 +34,39 @@ struct fila_t *fila_destroi (struct fila_t *f){
 
 }
 
+static int item_repetido(struct fila_t *f, int *item){
+    struct fila_nodo_t *aux = f->prim;
+    while (aux != f->fim){
+        if (aux->item == item)
+            return 1;
+        aux = aux->prox;
+    }
+    if (aux->item == item)
+        return 1;
+    return 0;
+}
+
 // Insere o item na fila
 // Inserir duas vezes o mesmo item (o mesmo ponteiro) é um erro.
 // Retorno: número de itens na fila após a operação ou -1 se erro.
-int fila_insere (struct fila_t *f, void *item){
+int fila_insere (struct fila_t *f, int *item){
+    if (f == NULL || item == NULL)
+        return -1;
+    if (item_repetido(f, item))
+        return -1;
+    struct fila_nodo_t *aux = malloc(sizeof(struct fila_nodo_t));
+    aux->item = *item;
+    if (f->num == 0){
 
+    }
 }
 
 // Retira o primeiro item da fila e o devolve
 // Retorno: ponteiro para o item retirado ou NULL se fila vazia ou erro.
-void *fila_retira (struct fila_t *f){
+int *fila_retira (struct fila_t *f){
     if (f == NULL || f->prim == NULL || f->num == 0)
-        return NULL;
-    void *item = f->prim->item;
+        return -1;
+    int *item = f->prim->item;
     struct fila_nodo_t *aux = f->prim->prox;
     free(f->prim);
     f->prim = aux;
@@ -61,16 +81,17 @@ int fila_tamanho (struct fila_t *f){
     return f->num;
 }
 
-// Imprime o conteúdo da fila 
+// Imprime o conteúdo da fila
 void fila_imprime (struct fila_t *f){
     if (f == NULL || f->num == 0){
         printf("Fila vazia/não iniciada!\n");
         return;
     }
-    struct f_nodo_t *aux = f->prim;
+    struct fila_nodo_t *aux = f->prim;
     while (aux != f->fim){
-        printf("");
+        printf("%d", aux->item);
+        aux = aux->prox;
     }
-    printf("");
+    printf("%d", aux->item);
     return;
 }
