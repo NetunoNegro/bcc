@@ -1,22 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "fila.h"
-
-
-// descreve um nodo da fila 
-struct fila_nodo_t
-{
-	int item ;			// item associado ao nodo
-	struct fila_nodo_t *prox;	// próximo nodo
-};
-
-// descreve uma fila 
-struct fila_t
-{
-	struct fila_nodo_t *prim ;	// primeiro nodo da fila
-	struct fila_nodo_t *fim;	// último nodo da fila
-	int num ;			// número de itens na fila
-} ;
 
 // Cria uma fila vazia.
 // Retorno: ponteiro para a fila criada ou NULL se erro.
@@ -31,9 +16,18 @@ struct fila_t *fila_cria (){
 // Libera todas as estruturas de dados da fila, inclusive os itens.
 // Retorno: NULL.
 struct fila_t *fila_destroi (struct fila_t *f){
-
+    if (f == NULL)
+        return NULL;
+    struct fila_nodo_t *aux = f->prim;
+    while(aux != NULL){
+        f->prim = f->prim->prox;
+        free(aux);
+        aux = f->prim;
+    }
+    free(f);
+    return NULL;
 }
-
+/*
 static int item_repetido(struct fila_t *f, int *item){
     struct fila_nodo_t *aux = f->prim;
     while (aux != f->fim){
@@ -60,17 +54,38 @@ int fila_insere (struct fila_t *f, int *item){
 
     }
 }
+*/
+// Insere um item no final da fila (politica FIFO).
+// Retorno: 1 se tiver sucesso ou 0 se falhar.
+int fila_insere (struct fila_t *f, int item){
+    if (f == NULL)
+        return 0;
+    struct fila_nodo_t *aux = malloc(sizeof(struct fila_nodo_t));
+    aux->item = item;
+    aux->prox = NULL;
+    if (f->num == 0){
+        f->prim = aux;
+        f->ult = aux;
+        f->num++;
+        return 1;
+    }
+    f->ult->prox = aux;
+    f->ult = aux;
+    f->num++;
+    return 1;
+}
 
 // Retira o primeiro item da fila e o devolve
-// Retorno: ponteiro para o item retirado ou NULL se fila vazia ou erro.
-int *fila_retira (struct fila_t *f){
+// Retorno 1 se a operação foi bem sucedida e 0 caso contrário
+int fila_retira (struct fila_t *f, int *item){
     if (f == NULL || f->prim == NULL || f->num == 0)
-        return -1;
-    int *item = f->prim->item;
+        return 0;
+    *item = f->prim->item;
     struct fila_nodo_t *aux = f->prim->prox;
     free(f->prim);
     f->prim = aux;
-    return item;
+    f->num--;
+    return 1;
 }
 
 // Informa o número de itens na fila.
@@ -88,10 +103,11 @@ void fila_imprime (struct fila_t *f){
         return;
     }
     struct fila_nodo_t *aux = f->prim;
-    while (aux != f->fim){
-        printf("%d", aux->item);
+    printf("Fila : ");
+    while (aux != NULL){
+        printf("%d ", aux->item);
         aux = aux->prox;
     }
-    printf("%d", aux->item);
+    printf("\n");
     return;
 }
