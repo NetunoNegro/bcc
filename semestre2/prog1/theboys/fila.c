@@ -27,34 +27,7 @@ struct fila_t *fila_destroi (struct fila_t *f){
     free(f);
     return NULL;
 }
-/*
-static int item_repetido(struct fila_t *f, int *item){
-    struct fila_nodo_t *aux = f->prim;
-    while (aux != f->fim){
-        if (aux->item == item)
-            return 1;
-        aux = aux->prox;
-    }
-    if (aux->item == item)
-        return 1;
-    return 0;
-}
 
-// Insere o item na fila
-// Inserir duas vezes o mesmo item (o mesmo ponteiro) é um erro.
-// Retorno: número de itens na fila após a operação ou -1 se erro.
-int fila_insere (struct fila_t *f, int *item){
-    if (f == NULL || item == NULL)
-        return -1;
-    if (item_repetido(f, item))
-        return -1;
-    struct fila_nodo_t *aux = malloc(sizeof(struct fila_nodo_t));
-    aux->item = *item;
-    if (f->num == 0){
-
-    }
-}
-*/
 // Insere um item no final da fila (politica FIFO).
 // Retorno: 1 se tiver sucesso ou 0 se falhar.
 int fila_insere (struct fila_t *f, int item){
@@ -99,15 +72,13 @@ int fila_tamanho (struct fila_t *f){
 // Imprime o conteúdo da fila
 void fila_imprime (struct fila_t *f){
     if (f == NULL || f->num == 0){
-        printf("Fila vazia/não iniciada!\n");
+        printf(" ");
         return;
     }
     struct fila_nodo_t *aux = f->prim;
-    printf("Fila : ");
     while (aux != NULL){
         printf("%d ", aux->item);
         aux = aux->prox;
     }
-    printf("\n");
     return;
 }
